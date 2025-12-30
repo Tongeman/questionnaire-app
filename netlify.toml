@@ -1,9 +1,15 @@
 [build]
   publish = "."
   functions = "netlify/functions"
+  command = "apt-get update -qq && apt-get install -y -qq fonts-dejavu-core || true"
 
 [functions]
   node_bundler = "esbuild"
+  external_node_modules = ["sharp"]
+
+# Environment variables for sharp
+[build.environment]
+  SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
 
 # Redirect API calls to functions
 [[redirects]]

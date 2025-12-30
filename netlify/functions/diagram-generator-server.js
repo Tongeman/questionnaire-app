@@ -1,6 +1,8 @@
 /**
  * Business Assessment Diagram Generator - Server Version
  * For use in Netlify Functions (Node.js environment)
+ * 
+ * Uses DejaVu Sans font which is available on Netlify's Ubuntu build image
  */
 
 // Colour definitions
@@ -156,6 +158,10 @@ function getTextAnchor(angle) {
     return "middle";
 }
 
+/**
+ * Generate the SVG diagram
+ * Uses DejaVu Sans font which is commonly available on Linux/Netlify
+ */
 function generate(scores) {
     const requiredSegments = [
         "Financial Control", "Growth Strategy", "Lifestyle & Exit Plan",
@@ -176,11 +182,12 @@ function generate(scores) {
     
     const parts = [];
     
+    // SVG header - using fonts commonly available on Linux systems
     parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}">`);
     parts.push(`  <defs>`);
     parts.push(`    <style>`);
-    parts.push(`      .category-label { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }`);
-    parts.push(`      .segment-label { font-family: Arial, sans-serif; font-size: 10px; fill: #555; }`);
+    parts.push(`      .category-label { font-family: "DejaVu Sans", "Liberation Sans", sans-serif; font-size: 16px; font-weight: bold; fill: #333; }`);
+    parts.push(`      .segment-label { font-family: "DejaVu Sans", "Liberation Sans", sans-serif; font-size: 10px; fill: #555; }`);
     parts.push(`    </style>`);
     parts.push(`  </defs>`);
     parts.push(`  <rect width="100%" height="100%" fill="white"/>`);
