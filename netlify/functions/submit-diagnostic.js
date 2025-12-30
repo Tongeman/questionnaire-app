@@ -3,6 +3,15 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
+// Debug logging - remove after testing ******
+console.log('SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
+console.log('SUPABASE_KEY exists:', !!process.env.SUPABASE_KEY);
+
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+    console.error('Missing Supabase environment variables!');
+}
+//*****************************************
+
 const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_KEY

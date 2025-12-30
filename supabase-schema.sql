@@ -52,17 +52,17 @@ CREATE INDEX IF NOT EXISTS idx_diagnostic_submissions_annual_revenue ON diagnost
 -- ============================================================================
 
 -- Enable RLS on tables
--- ALTER TABLE diagnostic_users ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE diagnostic_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE diagnostic_users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE diagnostic_submissions ENABLE ROW LEVEL SECURITY;
 
 -- Allow inserts from anon users (for the diagnostic submission)
--- CREATE POLICY "Allow anonymous inserts" ON diagnostic_users
---     FOR INSERT TO anon
---     WITH CHECK (true);
+CREATE POLICY "Allow anonymous inserts" ON diagnostic_users
+     FOR INSERT TO anon
+     WITH CHECK (true);
 
--- CREATE POLICY "Allow anonymous inserts" ON diagnostic_submissions
---     FOR INSERT TO anon
---     WITH CHECK (true);
+ CREATE POLICY "Allow anonymous inserts" ON diagnostic_submissions
+     FOR INSERT TO anon
+     WITH CHECK (true);
 
 -- ============================================================================
 -- USEFUL VIEWS (Optional)
