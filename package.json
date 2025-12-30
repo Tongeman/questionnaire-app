@@ -1,0 +1,16 @@
+{
+  "name": "x2-diagnostic",
+  "version": "2.0.0",
+  "description": "X2 Business Growth Diagnostic Tool",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "resend": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

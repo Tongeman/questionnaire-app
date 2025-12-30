@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X2 Business Growth Diagnostic</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p class="loading-message">Analysing your results...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Introduction Screen -->
+        <div id="introScreen" class="screen">
+            <div class="logo-container">
+                <img src="x2-logo.png" alt="X2 Method Logo" class="logo">
+            </div>
+
+            <h1 class="intro-title">Discover What's Really Holding Your Business Back</h1>
+            <h2 class="intro-subtitle">The X2 Business Growth Diagnostic</h2>
+
+            <div class="intro-content">
+                <p>You've built something real. You're putting in the hours, serving clients, making sales. But somewhere along the way, growth started feeling like pushing a boulder uphill.</p>
+
+                <p>Here's what most business owners between £100k and £1M don't realise: <strong>the thing holding you back isn't a lack of effort</strong>. It's a hidden constraint — an area of your business sitting in your blind spot, quietly creating chaos while you focus elsewhere.</p>
+
+                <p>This diagnostic will shine a light on all nine critical areas of your business and show you exactly where the friction is coming from.</p>
+
+                <div class="intro-features">
+                    <h3>What You'll Discover:</h3>
+                    <ul>
+                        <li>A clear Red / Amber / Green rating for each of the 9 growth areas</li>
+                        <li>Your primary constraint — the one area that, once fixed, makes everything else easier</li>
+                        <li>Why you feel capable but stuck, and what that really means</li>
+                        <li>A personalised report you can use to focus your next 90 days</li>
+                    </ul>
+                </div>
+
+                <p class="intro-time">Takes about 5 minutes. Get your diagnosis instantly.</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="startDiagnostic()">
+                Start My Diagnostic
+                <span class="btn-arrow">→</span>
+            </button>
+        </div>
+
+        <!-- Context Questions Screen -->
+        <div id="contextScreen" class="screen hidden">
+            <div class="screen-header">
+                <h2>About You & Your Business</h2>
+                <p>Help us understand your situation so we can personalise your results.</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="contextProgressBar"></div>
+                </div>
+                <div class="progress-text" id="contextProgressText">Question 1 of 5</div>
+            </div>
+
+            <div id="contextQuestionContainer" class="question-container"></div>
+
+            <div class="btn-container">
+                <button class="btn btn-secondary" id="contextPrevBtn" onclick="previousContextQuestion()" disabled>
+                    <span class="btn-arrow">←</span> Previous
+                </button>
+                <button class="btn btn-primary" id="contextNextBtn" onclick="nextContextQuestion()" disabled>
+                    Next <span class="btn-arrow">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Diagnostic Questions Screen -->
+        <div id="diagnosticScreen" class="screen hidden">
+            <div class="screen-header">
+                <h2>Business Growth Diagnostic</h2>
+                <p id="currentAreaName" class="area-indicator">Financial Control</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="diagnosticProgressBar"></div>
+                </div>
+                <div class="progress-text" id="diagnosticProgressText">Question 1 of 45</div>
+            </div>
+
+            <div id="diagnosticQuestionContainer" class="question-container"></div>
+
+            <div class="btn-container">
+                <button class="btn btn-secondary" id="diagnosticPrevBtn" onclick="previousDiagnosticQuestion()" disabled>
+                    <span class="btn-arrow">←</span> Previous
+                </button>
+                <button class="btn btn-primary" id="diagnosticNextBtn" onclick="nextDiagnosticQuestion()" disabled>
+                    Next <span class="btn-arrow">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Email Capture Screen -->
+        <div id="emailScreen" class="screen hidden">
+            <div class="email-form-container">
+                <div class="screen-header">
+                    <h2>Almost There!</h2>
+                    <p>Enter your email to see your personalised diagnostic results.</p>
+                </div>
+
+                <form id="emailForm" class="email-form" onsubmit="submitEmail(event)">
+                    <div class="form-group">
+                        <label for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" name="email" required placeholder="you@yourbusiness.com">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="emailConsent" name="consent" required>
+                        <label for="emailConsent">
+                            I agree to receive helpful emails about growing my business. You can unsubscribe at any time.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        View My Results
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="screen hidden">
+            <div class="results-container">
+                <div class="logo-container">
+                    <img src="x2-logo.png" alt="X2 Method Logo" class="logo">
+                </div>
+
+                <h2 class="results-title">Your X2 Business Growth Diagnostic</h2>
+                
+                <div id="contextSummary" class="context-summary"></div>
+
+                <div id="primaryConstraint" class="primary-constraint"></div>
+
+                <div id="resultsGrid" class="results-grid"></div>
+
+                <div class="results-actions">
+                    <div class="email-results-section">
+                        <h3>Want these results emailed to you?</h3>
+                        <p>Receive a copy of your personalised analysis for future reference.</p>
+                        <button class="btn btn-primary" id="sendEmailBtn" onclick="sendResultsEmail()">
+                            Send Results to My Email
+                        </button>
+                        <p id="emailSentMessage" class="email-sent-message hidden">✓ Results sent to your email!</p>
+                    </div>
+
+                    <button class="btn btn-secondary btn-full" onclick="resetDiagnostic()">
+                        Take Diagnostic Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/area-definitions.js"></script>
+    <script src="js/diagnostic-data.js"></script>
+    <script src="js/context-questions.js"></script>
+    <script src="js/app-state.js"></script>
+    <script src="js/scoring-engine.js"></script>
+    <script src="js/ui-renderer.js"></script>
+    <script src="js/results-renderer.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
