@@ -115,6 +115,13 @@ const UIRenderer = {
         });
         input.addEventListener('change', () => {
             this.updateContextNextButton();
+            
+            // Auto-advance for select dropdowns after selection
+            if (question.type === 'select' && input.value) {
+                setTimeout(() => {
+                    nextContextQuestion();
+                }, 300);
+            }
         });
         
         // Focus the input
@@ -216,6 +223,12 @@ const UIRenderer = {
                 option.querySelector('input').checked = true;
                 // Update button state
                 this.updateDiagnosticNextButton();
+                
+                // Auto-advance to next question after a brief delay
+                // This gives the user visual feedback of their selection
+                setTimeout(() => {
+                    nextDiagnosticQuestion();
+                }, 300);
             });
         });
         
