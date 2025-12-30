@@ -613,6 +613,21 @@ textarea.text-input {
     margin-bottom: var(--space-xl);
 }
 
+/* Diagram Container */
+.diagram-container {
+    background: var(--color-white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.diagram-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Context Summary */
 .context-summary {
     background: var(--color-gray-100);

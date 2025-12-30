@@ -10,9 +10,28 @@ const ResultsRenderer = {
      * @param {Object} contextAnswers - User's context answers
      */
     renderResults(results, contextAnswers) {
+        this.renderDiagram(results.areaScores);
         this.renderContextSummary(contextAnswers);
         this.renderPrimaryConstraint(results.primaryConstraint);
         this.renderResultsGrid(results.areaScores);
+    },
+    
+    /**
+     * Render the diagnostic diagram
+     * @param {Object} areaScores - All area scores
+     */
+    renderDiagram(areaScores) {
+        // Build scores object for diagram generator
+        const scores = DiagramGenerator.buildScoresFromResults(areaScores);
+        
+        // Generate SVG
+        const svgString = DiagramGenerator.generate(scores);
+        
+        // Insert diagram into the page
+        const diagramContainer = document.getElementById('diagramContainer');
+        if (diagramContainer) {
+            diagramContainer.innerHTML = svgString;
+        }
     },
     
     /**

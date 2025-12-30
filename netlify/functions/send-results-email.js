@@ -2,21 +2,10 @@
 // Netlify Function: Send diagnostic results email via Resend
 
 const { Resend } = require('resend');
+const sharp = require('sharp');
+const DiagramGenerator = require('./diagram-generator-server');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Map constraint categories to diagram images (if you have these)
-const constraintDiagrams = {
-    "Financial Control": "X2_Diagram_7.png",
-    "Growth Strategy": "X2_Diagram_8.png",
-    "Lifestyle & Exit Plan": "X2_Diagram_9.png",
-    "Marketing & Leads": "X2_Diagram_6.png",
-    "Selling & Salespeople": "X2_Diagram_5.png",
-    "Service & Reputation": "X2_Diagram_4.png",
-    "Drive Change": "X2_Diagram_1.png",
-    "People Management": "X2_Diagram_3.png",
-    "Systems & Automation": "X2_Diagram_2.png"
-};
 
 // Helper function to convert markdown to HTML
 function markdownToHtml(markdown) {
@@ -55,6 +44,37 @@ function getStatusBgColor(status) {
     if (statusLower === 'amber') return '#fffbeb';
     if (statusLower === 'green') return '#ecfdf5';
     return '#f3f4f6';
+}
+
+/**
+ * Generate PNG diagram from scores
+ */
+async function generateDiagramPng(scores) {
+    try {
+        // Build scores object in the format the diagram generator expects
+        const diagramScores = {};
+        for (const areaId in scores) {
+            if (scores.hasOwnProperty(areaId)) {
+                const area = scores[areaId];
+                diagramScores[area.name] = area.status;
+            }
+        }
+        
+        console.log('Generating diagram with scores:', diagramScores);
+        
+        // Generate SVG
+        const svgString = DiagramGenerator.generate(diagramScores);
+        
+        // Convert SVG to PNG using sharp
+        const pngBuffer = await sharp(Buffer.from(svgString))
+            .png()
+            .toBuffer();
+        
+        return pngBuffer.toString('base64');
+    } catch (error) {
+        console.error('Error generating diagram:', error);
+        return null;
+    }
 }
 
 exports.handler = async (event, context) => {
@@ -113,25 +133,36 @@ exports.handler = async (event, context) => {
         `;
         console.log('Business Profile section built');
 
-        // Build Diagram section (if constraint is available)
+        // Build Diagram section - generate PNG dynamically
         let diagramHtml = '';
-        if (selectedConstraint && selectedConstraint.category) {
-            const cleanConstraintName = selectedConstraint.category.trim();
-            const diagramFilename = constraintDiagrams[cleanConstraintName];
-
-            if (diagramFilename) {
-                // Update this URL to your actual domain
-                const diagramUrl = `https://x2diagnostic.netlify.app/images/${diagramFilename}`;
+        let diagramAttachment = null;
+        
+        if (scores) {
+            console.log('Generating diagram PNG...');
+            const diagramBase64 = await generateDiagramPng(scores);
+            
+            if (diagramBase64) {
+                // Use CID (Content-ID) for embedded image in email
                 diagramHtml = `
                     <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0; text-align: center;">
-                        <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px;">Your Primary Constraint</h2>
-                        <img src="${diagramUrl}" alt="X2 Method Diagram - ${cleanConstraintName}" style="max-width: 100%; height: auto; border-radius: 8px;">
+                        <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px;">Your Business Diagnostic Overview</h2>
+                        <img src="cid:diagram" alt="X2 Business Diagnostic Diagram" style="max-width: 100%; height: auto; border-radius: 8px;">
                     </div>
                 `;
-                console.log('Diagram section built for:', cleanConstraintName);
+                
+                // Prepare attachment for embedding
+                diagramAttachment = {
+                    filename: 'x2-diagnostic-diagram.png',
+                    content: diagramBase64,
+                    content_id: 'diagram'
+                };
+                
+                console.log('Diagram PNG generated and prepared for embedding');
             } else {
-                console.warn('Diagram not found for:', cleanConstraintName);
+                console.warn('Failed to generate diagram PNG');
             }
+        } else {
+            console.warn('No scores provided for diagram generation');
         }
 
         // Build main report content
@@ -211,6 +242,16 @@ exports.handler = async (event, context) => {
             html: emailHtml,
             reply_to: 'david@x2method.com'
         };
+        
+        // Add diagram attachment if available
+        if (diagramAttachment) {
+            emailConfig.attachments = [{
+                filename: diagramAttachment.filename,
+                content: Buffer.from(diagramAttachment.content, 'base64'),
+                cid: diagramAttachment.content_id
+            }];
+            console.log('Diagram attachment added to email');
+        }
 
         const data = await resend.emails.send(emailConfig);
 
