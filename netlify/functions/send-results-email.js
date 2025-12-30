@@ -2,8 +2,6 @@
 // Netlify Function: Send diagnostic results email via Resend
 
 const { Resend } = require('resend');
-const sharp = require('sharp');
-const DiagramGenerator = require('./diagram-generator-server');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -28,53 +26,153 @@ function markdownToHtml(markdown) {
     return html;
 }
 
-// Helper function to get status color
+// Helper function to get status color (for text)
 function getStatusColor(status) {
     const statusLower = status.toLowerCase();
     if (statusLower === 'red') return '#dc3545';
-    if (statusLower === 'amber') return '#f59e0b';
-    if (statusLower === 'green') return '#10b981';
+    if (statusLower === 'amber') return '#b45309';
+    if (statusLower === 'green') return '#059669';
     return '#666';
 }
 
 // Helper function to get status background color
 function getStatusBgColor(status) {
     const statusLower = status.toLowerCase();
-    if (statusLower === 'red') return '#fdf2f2';
-    if (statusLower === 'amber') return '#fffbeb';
-    if (statusLower === 'green') return '#ecfdf5';
+    if (statusLower === 'red') return '#fee2e2';
+    if (statusLower === 'amber') return '#fef3c7';
+    if (statusLower === 'green') return '#d1fae5';
     return '#f3f4f6';
 }
 
+// Helper function to get status dot color (bright)
+function getStatusDotColor(status) {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'red') return '#E53935';
+    if (statusLower === 'amber') return '#FFB300';
+    if (statusLower === 'green') return '#43A047';
+    return '#9CA3AF';
+}
+
+// Helper function to get status label
+function getStatusLabel(status) {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'red') return 'Needs Attention';
+    if (statusLower === 'amber') return 'Room to Improve';
+    if (statusLower === 'green') return 'On Track';
+    return status;
+}
+
 /**
- * Generate PNG diagram from scores
+ * Generate HTML table showing all 9 business areas with RAG status
  */
-async function generateDiagramPng(scores) {
-    try {
-        // Build scores object in the format the diagram generator expects
-        const diagramScores = {};
-        for (const areaId in scores) {
-            if (scores.hasOwnProperty(areaId)) {
-                const area = scores[areaId];
-                diagramScores[area.name] = area.status;
-            }
+function generateDiagramHtmlTable(scores) {
+    if (!scores) return '';
+    
+    // Define the three categories and their areas
+    const categories = {
+        Cash: {
+            color: '#1e40af', // Blue
+            bgColor: '#eff6ff',
+            areas: ['Financial Control', 'Growth Strategy', 'Lifestyle & Exit Plan']
+        },
+        Capacity: {
+            color: '#7c3aed', // Purple
+            bgColor: '#f5f3ff',
+            areas: ['Drive Change', 'Systems & Automation', 'People Management']
+        },
+        Customers: {
+            color: '#059669', // Green
+            bgColor: '#ecfdf5',
+            areas: ['Marketing & Leads', 'Selling & Salespeople', 'Service & Reputation']
         }
-        
-        console.log('Generating diagram with scores:', diagramScores);
-        
-        // Generate SVG
-        const svgString = DiagramGenerator.generate(diagramScores);
-        
-        // Convert SVG to PNG using sharp
-        const pngBuffer = await sharp(Buffer.from(svgString))
-            .png()
-            .toBuffer();
-        
-        return pngBuffer.toString('base64');
-    } catch (error) {
-        console.error('Error generating diagram:', error);
-        return null;
+    };
+    
+    // Build area status lookup from scores
+    const areaStatus = {};
+    for (const areaId in scores) {
+        if (scores.hasOwnProperty(areaId)) {
+            const area = scores[areaId];
+            areaStatus[area.name] = area.status;
+        }
     }
+    
+    let html = `
+        <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0;">
+            <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px; text-align: center;">Your Business Diagnostic Overview</h2>
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+    `;
+    
+    // Generate each category section
+    for (const [categoryName, category] of Object.entries(categories)) {
+        html += `
+                <tr>
+                    <td colspan="2" style="padding: 15px 10px 8px 10px;">
+                        <div style="font-weight: bold; font-size: 16px; color: ${category.color}; border-bottom: 2px solid ${category.color}; padding-bottom: 5px;">
+                            ${categoryName}
+                        </div>
+                    </td>
+                </tr>
+        `;
+        
+        // Add each area in this category
+        for (const areaName of category.areas) {
+            const status = areaStatus[areaName] || 'amber';
+            const dotColor = getStatusDotColor(status);
+            const statusLabel = getStatusLabel(status);
+            const statusBg = getStatusBgColor(status);
+            const statusTextColor = getStatusColor(status);
+            
+            html += `
+                <tr>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #f0f0f0;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 12px; vertical-align: middle;">
+                                    <div style="width: 10px; height: 10px; border-radius: 50%; background-color: ${dotColor};"></div>
+                                </td>
+                                <td style="padding-left: 10px; vertical-align: middle;">
+                                    <span style="font-size: 14px; color: #333;">${areaName}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #f0f0f0; text-align: right; width: 120px;">
+                        <span style="display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; background-color: ${statusBg}; color: ${statusTextColor};">
+                            ${statusLabel}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+    
+    html += `
+            </table>
+            
+            <!-- Legend -->
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr>
+                        <td style="text-align: center; padding: 5px;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #E53935; vertical-align: middle;"></span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Needs Attention</span>
+                        </td>
+                        <td style="text-align: center; padding: 5px;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #FFB300; vertical-align: middle;"></span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Room to Improve</span>
+                        </td>
+                        <td style="text-align: center; padding: 5px;">
+                            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #43A047; vertical-align: middle;"></span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">On Track</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    return html;
 }
 
 exports.handler = async (event, context) => {
@@ -133,34 +231,12 @@ exports.handler = async (event, context) => {
         `;
         console.log('Business Profile section built');
 
-        // Build Diagram section - generate PNG dynamically
+        // Build Diagram section using HTML table (works in all email clients)
         let diagramHtml = '';
-        let diagramAttachment = null;
-        
         if (scores) {
-            console.log('Generating diagram PNG...');
-            const diagramBase64 = await generateDiagramPng(scores);
-            
-            if (diagramBase64) {
-                // Use CID (Content-ID) for embedded image in email
-                diagramHtml = `
-                    <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0; text-align: center;">
-                        <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px;">Your Business Diagnostic Overview</h2>
-                        <img src="cid:diagram" alt="X2 Business Diagnostic Diagram" style="max-width: 100%; height: auto; border-radius: 8px;">
-                    </div>
-                `;
-                
-                // Prepare attachment for embedding
-                diagramAttachment = {
-                    filename: 'x2-diagnostic-diagram.png',
-                    content: diagramBase64,
-                    content_id: 'diagram'
-                };
-                
-                console.log('Diagram PNG generated and prepared for embedding');
-            } else {
-                console.warn('Failed to generate diagram PNG');
-            }
+            console.log('Generating HTML diagram table...');
+            diagramHtml = generateDiagramHtmlTable(scores);
+            console.log('HTML diagram table generated');
         } else {
             console.warn('No scores provided for diagram generation');
         }
@@ -232,7 +308,7 @@ exports.handler = async (event, context) => {
         console.log('Email HTML assembled');
         console.log('Total HTML length:', emailHtml.length, 'characters');
 
-        // Send email
+        // Send email (no attachments needed - pure HTML)
         console.log('Sending email to:', userEmail);
 
         const emailConfig = {
@@ -242,16 +318,6 @@ exports.handler = async (event, context) => {
             html: emailHtml,
             reply_to: 'david@x2method.com'
         };
-        
-        // Add diagram attachment if available
-        if (diagramAttachment) {
-            emailConfig.attachments = [{
-                filename: diagramAttachment.filename,
-                content: Buffer.from(diagramAttachment.content, 'base64'),
-                cid: diagramAttachment.content_id
-            }];
-            console.log('Diagram attachment added to email');
-        }
 
         const data = await resend.emails.send(emailConfig);
 
