@@ -66,6 +66,7 @@ const ResultsRenderer = {
         // Render opening text
         const openingHtml = `
             <div class="report-section report-opening">
+                <h3>Introduction</h3>
                 <p>${REPORT_OPENING}</p>
             </div>
         `;
@@ -94,6 +95,7 @@ const ResultsRenderer = {
         // Render closing text
         const closingHtml = `
             <div class="report-section report-closing">
+                <h3>Summary</h3>
                 <p>${REPORT_CLOSING}</p>
             </div>
         `;
@@ -155,6 +157,7 @@ const ResultsRenderer = {
         markdown += `**Hours per Week:** ${hoursLabel}\n\n`;
         
         // Opening paragraph
+        markdown += `## Introduction\n\n`;
         markdown += `${REPORT_OPENING}\n\n`;
         
         // All Areas
@@ -169,14 +172,15 @@ const ResultsRenderer = {
             markdown += `**${area.chaosName}:** ${area.description}\n\n`;
         }
         
-        // Summary
+        // Statistics summary
         const health = results.overallHealth;
-        markdown += `## Summary\n\n`;
+        markdown += `## Your Results at a Glance\n\n`;
         markdown += `* **Areas needing urgent attention (Red):** ${health.statusCounts.red}\n`;
         markdown += `* **Areas with room for improvement (Amber):** ${health.statusCounts.amber}\n`;
         markdown += `* **Areas functioning well (Green):** ${health.statusCounts.green}\n\n`;
         
         // Closing paragraph
+        markdown += `## Summary\n\n`;
         markdown += `${REPORT_CLOSING}\n\n`;
         
         markdown += `---\n\n`;
