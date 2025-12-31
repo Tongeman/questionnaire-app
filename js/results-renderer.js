@@ -67,7 +67,7 @@ const ResultsRenderer = {
         const openingHtml = `
             <div class="report-section report-opening">
                 <h3>Introduction</h3>
-                <p>${REPORT_OPENING}</p>
+                ${MarkdownParser.parse(REPORT_OPENING)}
             </div>
         `;
         
@@ -76,15 +76,15 @@ const ResultsRenderer = {
             <div class="score-legend">
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>Needs Attention (5-11)</span>
+                    <span>Needs Attention (0-5)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot amber"></span>
-                    <span>Room to Improve (12-18)</span>
+                    <span>Room to Improve (6-11)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
-                    <span>Functioning Well (19-25)</span>
+                    <span>Functioning Well (12-15)</span>
                 </div>
             </div>
         `;
@@ -92,15 +92,49 @@ const ResultsRenderer = {
         // Render each area card
         const cardsHtml = orderedAreas.map(area => this.renderAreaCard(area)).join('');
         
-        // Render closing text
-        const closingHtml = `
-            <div class="report-section report-closing">
-                <h3>Summary</h3>
-                <p>${REPORT_CLOSING}</p>
+        // Render testimonial section
+        const testimonialHtml = `
+            <div class="report-section report-testimonial">
+                <h3>Does This Actually Work?</h3>
+                ${MarkdownParser.parse(REPORT_TESTIMONIAL)}
             </div>
         `;
         
-        container.innerHTML = openingHtml + legendHtml + cardsHtml + closingHtml;
+        // Render method section
+        const methodHtml = `
+            <div class="report-section report-method">
+                <h3>How the X2 Method Works</h3>
+                ${MarkdownParser.parse(REPORT_METHOD)}
+            </div>
+        `;
+        
+        // Render statistics summary
+        const health = ScoringEngine.calculateOverallHealth(areaScores);
+        const summaryHtml = `
+            <div class="report-section report-summary">
+                <h3>Your Results at a Glance</h3>
+                <p><strong>Areas needing urgent attention (Red):</strong> ${health.statusCounts.red}</p>
+                <p><strong>Areas with room for improvement (Amber):</strong> ${health.statusCounts.amber}</p>
+                <p><strong>Areas functioning well (Green):</strong> ${health.statusCounts.green}</p>
+            </div>
+        `;
+        
+        // Render closing text
+        const closingHtml = `
+            <div class="report-section report-closing">
+                <h3>What Happens Next</h3>
+                ${MarkdownParser.parse(REPORT_CLOSING)}
+            </div>
+        `;
+        
+        // Render bio
+        const bioHtml = `
+            <div class="report-section report-bio">
+                ${MarkdownParser.parse(REPORT_BIO)}
+            </div>
+        `;
+        
+        container.innerHTML = openingHtml + legendHtml + cardsHtml + testimonialHtml + methodHtml + summaryHtml + closingHtml + bioHtml;
     },
     
     /**
@@ -146,15 +180,15 @@ const ResultsRenderer = {
         const revenueLabel = REVENUE_LABELS[contextAnswers.annual_revenue] || contextAnswers.annual_revenue;
         const hoursLabel = HOURS_LABELS[contextAnswers.hours_per_week] || contextAnswers.hours_per_week;
         
-        let markdown = `# Your X2 Business Growth Diagnostic Results\n\n`;
+        let markdown = `# Your X2 Business Growth Diagnostic\nPersonalised Results for ${contextAnswers.name}\n\n`;
         
         // Business Profile
         markdown += `## Your Business Profile\n\n`;
-        markdown += `**Name:** ${contextAnswers.name}\n`;
-        markdown += `**Business:** ${contextAnswers.business_name}\n`;
-        markdown += `**What you do:** ${contextAnswers.business_description}\n`;
-        markdown += `**Annual Revenue:** ${revenueLabel}\n`;
-        markdown += `**Hours per Week:** ${hoursLabel}\n\n`;
+        markdown += `**Name:** ${contextAnswers.name}\n\n`;
+        markdown += `**Business:** ${contextAnswers.business_name}\n\n`;
+        markdown += `**What you do:** ${contextAnswers.business_description}\n\n`;
+        markdown += `**Revenue:** ${revenueLabel}\n\n`;
+        markdown += `**Hours per week:** ${hoursLabel}\n\n`;
         
         // Opening paragraph
         markdown += `## Introduction\n\n`;
@@ -167,24 +201,37 @@ const ResultsRenderer = {
         
         for (const area of orderedAreas) {
             const statusEmoji = area.status === 'red' ? '🔴' : area.status === 'amber' ? '🟡' : '🟢';
-            markdown += `### ${statusEmoji} ${area.name} (${area.score}/25)\n\n`;
+            markdown += `### ${statusEmoji} ${area.name} (${area.score}/15)\n`;
             markdown += `**Status:** ${area.statusLabel}\n\n`;
             markdown += `**Potential Chaos - ${area.chaosName}:** ${area.description}\n\n`;
         }
         
+        // Testimonial section
+        markdown += `## Does This Actually Work?\n\n`;
+        markdown += `${REPORT_TESTIMONIAL}\n\n`;
+        
+        // Method section
+        markdown += `## How the X2 Method Works\n\n`;
+        markdown += `${REPORT_METHOD}\n\n`;
+        
         // Statistics summary
         const health = results.overallHealth;
         markdown += `## Your Results at a Glance\n\n`;
-        markdown += `* **Areas needing urgent attention (Red):** ${health.statusCounts.red}\n`;
-        markdown += `* **Areas with room for improvement (Amber):** ${health.statusCounts.amber}\n`;
-        markdown += `* **Areas functioning well (Green):** ${health.statusCounts.green}\n\n`;
+        markdown += `**Areas needing urgent attention (Red):** ${health.statusCounts.red}\n\n`;
+        markdown += `**Areas with room for improvement (Amber):** ${health.statusCounts.amber}\n\n`;
+        markdown += `**Areas functioning well (Green):** ${health.statusCounts.green}\n\n`;
         
         // Closing paragraph
-        markdown += `## Summary\n\n`;
+        markdown += `## What Happens Next\n\n`;
         markdown += `${REPORT_CLOSING}\n\n`;
         
         markdown += `---\n\n`;
-        markdown += `*This diagnostic was generated by the X2 Method. For more information on how to address your constraints, visit [x2method.com](https://x2method.com)*\n`;
+        
+        // Bio
+        markdown += `${REPORT_BIO}\n\n`;
+        
+        markdown += `---\n\n`;
+        markdown += `*This diagnostic was generated by the X2 Method. For more information, visit [x2method.com](https://x2method.com)*\n`;
         
         return markdown;
     }

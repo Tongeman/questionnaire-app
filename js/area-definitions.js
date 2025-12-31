@@ -115,10 +115,19 @@ const AREA_DEFINITIONS = [
 ];
 
 // Opening paragraph for the report
-const REPORT_OPENING = "Every business owner has areas they focus on — and areas they avoid, neglect, or simply can't see because their attention is elsewhere. We call this \"The Shadow.\" Left unaddressed, these shadows create daily friction, stress, and resistance — what we call \"Chaos.\" This report shows you where your shadows are hiding and what kind of chaos they're creating. It's not about judgement. It's about visibility. Because once you can see what's really going on, you can start making changes that actually move the needle — instead of running faster on a wheel that's going nowhere.";
+const REPORT_OPENING = "Most business owners work incredibly hard fixing problems - improving marketing, tweaking sales processes, hiring people, implementing systems - but the business stays fundamentally the same size. Or worse, grows just enough to create more complexity without more freedom.\n\nAfter 20 years coaching businesses from £100k to £5M+, I've identified nine interconnected areas that determine whether a business grows sustainably or stays stuck in exhausting cycles.\n\nThis diagnostic shows you all nine areas - where you're strong, where you have untapped growth potential, and most importantly, how these areas are working together (or against each other) right now.\n\nThe goal isn't to overwhelm you with problems. It's to show you the complete picture - because once you can see the whole system, you can fix it systematically instead of playing whack-a-mole forever.\n\n**— Lee Duncan**\nAuthor, *Double Your Business* (FT Publishing)";
 
 // Closing paragraph for the report
-const REPORT_CLOSING = "Here's the truth: none of these areas are broken beyond repair. Every shadow in this report can be addressed — not with more hours, more stress, or more heroic effort, but with focus, clarity, and the right approach. Business owners who systematically work through each area typically find that the chaos quietens, the business becomes easier to run, and growth stops feeling like a grind. The patterns you're seeing aren't permanent. They're just unfinished business — and unfinished business can be completed.";
+const REPORT_CLOSING = "You now have something most business owners never get: complete visibility.\n\nYou can see all nine areas. You know which ones are holding you back. You understand the chaos they're creating.\n\nHere's the critical question: **How long are you willing to let these patterns continue?**\n\nAnother year of watching opportunities slip away, working long hours in a business that should be giving you freedom, building revenue that evaporates through poor margins or customer churn?\n\nOr you could take a different path.\n\n**The X2 Method gives you**:\n- Immediate quick wins in your first 30 days (that typically cover your investment)\n- A systematic 9-month journey through all nine areas\n- Lee's 20 years of experience distilled into proven frameworks\n- A community of business owners at your stage doing it alongside you\n\nPaul Marsden was stuck at £600k for years. With this system, he grew to £2m and sold for millions before his 60th birthday.\n\nHis business wasn't that different from yours. He just had a system - and someone who'd done it hundreds of times before.\n\n**Over the next few days**, we'll email you:\n- A detailed breakdown of what happens in your first 30 days\n- A case study from a business owner with similar diagnostic results to yours\n- How the 9-month systematic approach works (and why piecemeal attempts fail)\n\n**Tomorrow's email**: \"The three onboarding sessions that change everything (and usually pay for themselves in month one)\"\n\nWatch for it.";
+
+// Testimonial section
+const REPORT_TESTIMONIAL = "**\"My goal was to sell before I was 60. My business was stuck at £600k when I first began working with Lee. With his coaching, I grew it to £2m. I sold it a few months after my 57th birthday for millions.\"**\n— Paul Marsden, former owner of Payplus Ltd\n\nPaul's story isn't unique. Over 20 years, Lee's coached hundreds of business owners through this exact process. The pattern is always the same:\n\n- Business owners who tackle one problem at a time stay stuck for years\n- Business owners who systematically strengthen all nine areas break through within 6-9 months\n\nThe difference isn't how hard you work. It's having a proven system and someone who's done this hundreds of times before.";
+
+// How the X2 Method Works section
+const REPORT_METHOD = "You're looking at areas that need attention - possibly feeling overwhelmed. Here's the good news: you don't have to figure this out alone.\n\n**Phase 1: Onboarding - Immediate Impact (First 30 Days)**\n\nBefore you even join the main program, three intensive sessions designed to create quick wins:\n\n**1. Set Your Compass**\nGet crystal clear on what you actually want from your business. (Most owners skip this step, then wonder why hitting revenue goals feels empty.)\n\n**2. Reclaim Your Time**\nLearn the time management strategies that let you work ON your business instead of just IN it. This is what makes everything else possible.\n\n**3. Fund Your Growth**\nQuick wins in pricing and margins. Most members cover their monthly investment from these changes alone - many double or triple it in the first month.\n\n**Phase 2: Systematic Growth (9 Months)**\n\nEach quarter focuses on one pillar of business growth:\n\n- **Cash Quarter**: Financial control and growth strategy (3 months)\n- **Customers Quarter**: Marketing, selling, and service (3 months)\n- **Capacity Quarter**: Systems, people, and driving change (3 months)\n\nOne area per month. Everyone in the membership working through the same content together. Weekly coaching. Proven frameworks. A community of business owners who actually get it.\n\nYou'll join wherever we are in the cycle and get immediate access to all previous months' content. But here's what matters: by the time you've been through all nine months, every area will have been systematically strengthened.\n\nNot patched. Not ignored. Actually fixed.\n\nAnd they'll work together - creating momentum instead of chaos.";
+
+// Lee's bio section
+const REPORT_BIO = "**About Lee Duncan**\n\nLee Duncan has spent 20+ years coaching business owners from £100k to £5M+. In 2012, Financial Times Publishing asked him to write *Double Your Business* based on his proven coaching strategies. He specializes in applying the Theory of Constraints to growing businesses - helping hundreds of clients break through their growth plateau systematically.\n\nThe X2 Method is the distilled version of what works from those hundreds of coaching engagements.";
 
 // Scoring thresholds
 const SCORE_THRESHOLDS = {
@@ -136,5 +145,14 @@ const STATUS_LABELS = {
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { AREA_DEFINITIONS, REPORT_OPENING, REPORT_CLOSING, SCORE_THRESHOLDS, STATUS_LABELS };
+    module.exports = { 
+        AREA_DEFINITIONS, 
+        REPORT_OPENING, 
+        REPORT_CLOSING, 
+        REPORT_TESTIMONIAL,
+        REPORT_METHOD,
+        REPORT_BIO,
+        SCORE_THRESHOLDS, 
+        STATUS_LABELS 
+    };
 }
