@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X2 Diagnostic Admin</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            margin-bottom: 30px;
+            color: #1e3a5f;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #152a47;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Admin Screen */
+        #adminScreen {
+            display: none;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #1e3a5f;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .submissions-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1e3a5f;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-red {
+            background: #fee2e2;
+            color: #dc3545;
+        }
+
+        .status-amber {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        .status-green {
+            background: #d1fae5;
+            color: #10b981;
+        }
+
+        /* Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 30px;
+            max-width: 900px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+        }
+
+        .detail-section h3 {
+            color: #1e3a5f;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e3a5f;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .area-results {
+            display: grid;
+            gap: 15px;
+        }
+
+        .area-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #ccc;
+        }
+
+        .area-card.red {
+            border-left-color: #dc3545;
+        }
+
+        .area-card.amber {
+            border-left-color: #f59e0b;
+        }
+
+        .area-card.green {
+            border-left-color: #10b981;
+        }
+
+        .area-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .area-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .question-answer {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .answer-value {
+            color: #1e3a5f;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1>X2 Diagnostic Admin</h1>
+            <form id="loginForm" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn" id="loginBtn">Login</button>
+                <div id="loginError" class="error-message hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Screen -->
+    <div id="adminScreen">
+        <div class="container">
+            <header>
+                <h1>X2 Diagnostic Submissions</h1>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </header>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalSubmissions">-</div>
+                    <div class="stat-label">Total Submissions</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalUsers">-</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avgRedAreas">-</div>
+                    <div class="stat-label">Avg Red Areas</div>
+                </div>
+            </div>
+
+            <div class="submissions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Business</th>
+                            <th>Primary Constraint</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionsTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">Loading submissions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <!-- Include diagnostic data for question text -->
+    <script src="js/area-definitions.js"></script>
+    <script src="js/diagnostic-data.js"></script>
+    <script src="js/context-questions.js"></script>
+
+    <script>
+        // State
+        let credentials = null;
+        let submissions = [];
+
+        // Login
+        async function login(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/.netlify/functions/get-submissions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        action: 'list'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    credentials = { username, password };
+                    submissions = data.submissions;
+                    showAdminScreen();
+                } else {
+                    errorDiv.textContent = data.error || 'Login failed';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        }
+
+        // Logout
+        function logout() {
+            credentials = null;
+            submissions = [];
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminScreen').style.display = 'none';
+            document.getElementById('loginForm').reset();
+        }
+
+        // Show admin screen with data
+        function showAdminScreen() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminScreen').style.display = 'block';
+            
+            renderStats();
+            renderSubmissions();
+        }
+
+        // Render statistics
+        function renderStats() {
+            const uniqueUsers = new Set(submissions.map(s => s.diagnostic_users.email)).size;
+            const totalRed = submissions.reduce((sum, s) => {
+                const scores = s.area_scores || {};
+                return sum + Object.values(scores).filter(area => area.status === 'red').length;
+            }, 0);
+            const avgRed = submissions.length > 0 ? (totalRed / submissions.length).toFixed(1) : 0;
+            
+            document.getElementById('totalSubmissions').textContent = submissions.length;
+            document.getElementById('totalUsers').textContent = uniqueUsers;
+            document.getElementById('avgRedAreas').textContent = avgRed;
+        }
+
+        // Render submissions table
+        function renderSubmissions() {
+            const tbody = document.getElementById('submissionsTableBody');
+            
+            if (submissions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No submissions found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = submissions.map(sub => {
+                const date = new Date(sub.created_at).toLocaleDateString();
+                const user = sub.diagnostic_users;
+                const constraint = sub.primary_constraint || 'N/A';
+                const revenue = sub.annual_revenue || 'N/A';
+                const business = sub.business_name || 'N/A';
+                
+                return `
+                    <tr class="clickable-row" onclick="viewDetails('${sub.id}')">
+                        <td>${date}</td>
+                        <td>${escapeHtml(user.name)}</td>
+                        <td>${escapeHtml(user.email)}</td>
+                        <td>${escapeHtml(business)}</td>
+                        <td>${escapeHtml(constraint)}</td>
+                        <td>${revenue}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // View submission details
+        async function viewDetails(submissionId) {
+            const submission = submissions.find(s => s.id === submissionId);
+            if (!submission) return;
+            
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('detailContent');
+            
+            content.innerHTML = '<div class="loading">Loading details...</div>';
+            modal.style.display = 'block';
+            
+            // Render details
+            renderDetails(submission);
+        }
+
+        // Render submission details
+        function renderDetails(submission) {
+            const content = document.getElementById('detailContent');
+            const user = submission.diagnostic_users;
+            
+            let html = `
+                <div class="detail-section">
+                    <h3>User Information</h3>
+                    <div class="info-grid">
+                        <div class="info-label">Name:</div>
+                        <div>${escapeHtml(user.name)}</div>
+                        <div class="info-label">Email:</div>
+                        <div>${escapeHtml(user.email)}</div>
+                        <div class="info-label">Business:</div>
+                        <div>${escapeHtml(submission.business_name || 'N/A')}</div>
+                        <div class="info-label">Description:</div>
+                        <div>${escapeHtml(submission.business_description || 'N/A')}</div>
+                        <div class="info-label">Revenue:</div>
+                        <div>${submission.annual_revenue || 'N/A'}</div>
+                        <div class="info-label">Hours/Week:</div>
+                        <div>${submission.hours_per_week || 'N/A'}</div>
+                        <div class="info-label">Submitted:</div>
+                        <div>${new Date(submission.created_at).toLocaleString()}</div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Area Scores</h3>
+                    <div class="area-results">
+            `;
+            
+            // Render each area with its questions
+            if (submission.area_scores && submission.raw_answers) {
+                for (const areaId in submission.area_scores) {
+                    const area = submission.area_scores[areaId];
+                    const areaQuestions = DIAGNOSTIC_QUESTIONS.filter(q => q.areaId === areaId);
+                    
+                    html += `
+                        <div class="area-card ${area.status}">
+                            <div class="area-header">
+                                <div class="area-name">${area.name}</div>
+                                <div>
+                                    <span class="status-badge status-${area.status}">${area.status.toUpperCase()}</span>
+                                    <strong>${area.score}/25</strong>
+                                </div>
+                            </div>
+                    `;
+                    
+                    // Show questions for this area
+                    areaQuestions.forEach(q => {
+                        const answer = submission.raw_answers[q.id];
+                        const answerLabel = answer ? q.scaleLabels[answer] : 'No answer';
+                        
+                        html += `
+                            <div class="question-answer">
+                                <div class="question-text">${q.text}</div>
+                                <div class="answer-value">${answer}/5: ${answerLabel}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div>`;
+                }
+            }
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+
+        // Close modal
+        function closeModal(event) {
+            if (!event || event.target.id === 'detailModal') {
+                document.getElementById('detailModal').style.display = 'none';
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
