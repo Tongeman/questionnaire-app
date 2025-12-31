@@ -119,7 +119,7 @@ const ResultsRenderer = {
                     <div class="result-card-score">${area.score}/25</div>
                 </div>
                 <div class="result-card-body">
-                    <p><strong>${area.chaosName}:</strong> ${area.description}</p>
+                    <p><strong>Potential Chaos - ${area.chaosName}:</strong> ${area.description}</p>
                 </div>
             </div>
         `;
@@ -169,7 +169,7 @@ const ResultsRenderer = {
             const statusEmoji = area.status === 'red' ? '🔴' : area.status === 'amber' ? '🟡' : '🟢';
             markdown += `### ${statusEmoji} ${area.name} (${area.score}/25)\n\n`;
             markdown += `**Status:** ${area.statusLabel}\n\n`;
-            markdown += `**${area.chaosName}:** ${area.description}\n\n`;
+            markdown += `**Potential Chaos - ${area.chaosName}:** ${area.description}\n\n`;
         }
         
         // Statistics summary
