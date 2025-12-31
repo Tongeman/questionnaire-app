@@ -122,9 +122,9 @@ const REPORT_CLOSING = "Here's the truth: none of these areas are broken beyond 
 
 // Scoring thresholds
 const SCORE_THRESHOLDS = {
-    red: { min: 5, max: 11 },
-    amber: { min: 12, max: 18 },
-    green: { min: 19, max: 25 }
+    red: { min: 0, max: 5 },
+    amber: { min: 6, max: 11 },
+    green: { min: 12, max: 15 }
 };
 
 // Status labels
