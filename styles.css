@@ -723,7 +723,6 @@ textarea.text-input {
     align-items: center;
     justify-content: space-between;
     padding: var(--space-lg);
-    cursor: pointer;
 }
 
 .result-card-title {
@@ -771,11 +770,6 @@ textarea.text-input {
 
 .result-card-body {
     padding: 0 var(--space-lg) var(--space-lg);
-    display: none;
-}
-
-.result-card.expanded .result-card-body {
-    display: block;
 }
 
 .result-card-body p {
@@ -841,6 +835,30 @@ textarea.text-input {
     background: var(--color-gray-100);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-xl);
+}
+
+/* Report Opening and Closing */
+.report-section {
+    background: var(--color-white);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-xl);
+}
+
+.report-opening {
+    border-left: 4px solid var(--color-primary);
+}
+
+.report-closing {
+    border-left: 4px solid var(--color-green);
+}
+
+.report-section p {
+    color: var(--color-gray-700);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 0;
 }
 
 .legend-item {
