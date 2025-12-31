@@ -370,13 +370,14 @@ strong {
 
 .area-indicator {
     display: inline-block;
-    background: var(--color-primary);
-    color: var(--color-white);
+    background: var(--color-gray-200);
+    color: var(--color-primary);
     padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-sm);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-top: var(--space-sm);
+    border: 2px solid var(--color-primary);
 }
 
 /* =====================================================
