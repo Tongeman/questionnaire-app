@@ -138,9 +138,9 @@ const SCORE_THRESHOLDS = {
 
 // Status labels
 const STATUS_LABELS = {
-    red: 'Needs Urgent Attention',
-    amber: 'Room for Improvement',
-    green: 'Functioning Well'
+    red: 'Needs Urgent Attention - High Growth Potential',
+    amber: 'Room to Improve - Moderate Growth Potential',
+    green: 'Functioning Well - Strong Foundation'
 };
 
 // Export for use in other files

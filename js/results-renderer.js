@@ -76,15 +76,15 @@ const ResultsRenderer = {
             <div class="score-legend">
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>Needs Attention (0-5)</span>
+                    <span>High Growth Potential (0-5)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot amber"></span>
-                    <span>Room to Improve (6-11)</span>
+                    <span>Moderate Growth Potential (6-11)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
-                    <span>Functioning Well (12-15)</span>
+                    <span>Strong Foundation (12-15)</span>
                 </div>
             </div>
         `;
