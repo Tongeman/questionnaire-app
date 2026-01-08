@@ -56,9 +56,9 @@ function getStatusDotColor(status) {
 // Helper function to get status label
 function getStatusLabel(status) {
     const statusLower = status.toLowerCase();
-    if (statusLower === 'red') return 'Needs Attention';
-    if (statusLower === 'amber') return 'Room to Improve';
-    if (statusLower === 'green') return 'On Track';
+    if (statusLower === 'red') return 'High Growth Potential - - Quick wins available';
+    if (statusLower === 'amber') return 'Moderate Growth Potential - Worth investing time';
+    if (statusLower === 'green') return 'Strong Foundation - Ready to scale';
     return status;
 }
 
@@ -156,15 +156,15 @@ function generateDiagramHtmlTable(scores) {
                     <tr>
                         <td style="text-align: center; padding: 5px;">
                             <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #E53935; vertical-align: middle;"></span>
-                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Needs Attention</span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">High Growth Potential - Quick wins available</span>
                         </td>
                         <td style="text-align: center; padding: 5px;">
                             <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #FFB300; vertical-align: middle;"></span>
-                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Room to Improve</span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Moderate Growth Potential - Worth investing time</span>
                         </td>
                         <td style="text-align: center; padding: 5px;">
                             <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #43A047; vertical-align: middle;"></span>
-                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">On Track</span>
+                            <span style="font-size: 12px; color: #666; margin-left: 5px; vertical-align: middle;">Strong Foundation - Ready to scale</span>
                         </td>
                     </tr>
                 </table>

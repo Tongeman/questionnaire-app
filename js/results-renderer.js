@@ -76,15 +76,15 @@ const ResultsRenderer = {
             <div class="score-legend">
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>High Growth Potential (0-5)</span>
+                    <span>High Growth Potential  - Quick wins available (0-5)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot amber"></span>
-                    <span>Moderate Growth Potential (6-11)</span>
+                    <span>Moderate Growth Potential - Worth investing time (6-11)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
-                    <span>Strong Foundation (12-15)</span>
+                    <span>Strong Foundation - Ready to scale (12-15)</span>
                 </div>
             </div>
         `;
@@ -121,9 +121,9 @@ const whyGroupHtml = `
         const summaryHtml = `
             <div class="report-section report-summary">
                 <h3>Your Results at a Glance</h3>
-                <p><strong>Areas with High Growth Potential:</strong> ${health.statusCounts.red}</p>
-                <p><strong>Areas with Moderate Growth Potential:</strong> ${health.statusCounts.amber}</p>
-                <p><strong>Areas with a Strong Foundation:</strong> ${health.statusCounts.green}</p>
+                <p><strong>High Growth Potential:</strong> - Quick wins available ${health.statusCounts.red}</p>
+                <p><strong>Moderate Growth Potential:</strong> - Worth investing time ${health.statusCounts.amber}</p>
+                <p><strong>Strong Foundation:</strong> - Ready to scale ${health.statusCounts.green}</p>
             </div>
         `;
         
@@ -229,9 +229,9 @@ const whyGroupHtml = `
         // Statistics summary
         const health = results.overallHealth;
         markdown += `## Your Results at a Glance\n\n`;
-        markdown += `**Areas with High Growth Potential:** ${health.statusCounts.red}\n\n`;
-        markdown += `**Areas with Moderate Growth Potential:** ${health.statusCounts.amber}\n\n`;
-        markdown += `**Areas with a Strong Foundation:** ${health.statusCounts.green}\n\n`;
+        markdown += `**Areas with High Growth Potential - Quick wins available:** ${health.statusCounts.red}\n\n`;
+        markdown += `**Areas with Moderate Growth Potential - Worth investing time:** ${health.statusCounts.amber}\n\n`;
+        markdown += `**Areas with a Strong Foundation:** - Ready to scale ${health.statusCounts.green}\n\n`;
         
         // Closing paragraph
         markdown += `## What Happens Next\n\n`;
