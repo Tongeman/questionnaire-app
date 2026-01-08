@@ -107,15 +107,23 @@ const ResultsRenderer = {
                 ${MarkdownParser.parse(REPORT_METHOD)}
             </div>
         `;
+		
+		// Render why group section
+const whyGroupHtml = `
+    <div class="report-section report-why-group">
+        <h3>Why a Group Format</h3>
+        ${MarkdownParser.parse(REPORT_WHY_GROUP)}
+    </div>
+`;
         
         // Render statistics summary
         const health = ScoringEngine.calculateOverallHealth(areaScores);
         const summaryHtml = `
             <div class="report-section report-summary">
                 <h3>Your Results at a Glance</h3>
-                <p><strong>Areas needing urgent attention (Red):</strong> ${health.statusCounts.red}</p>
-                <p><strong>Areas with room for improvement (Amber):</strong> ${health.statusCounts.amber}</p>
-                <p><strong>Areas functioning well (Green):</strong> ${health.statusCounts.green}</p>
+                <p><strong>Areas with High Growth Potential:</strong> ${health.statusCounts.red}</p>
+                <p><strong>Areas with Moderate Growth Potential:</strong> ${health.statusCounts.amber}</p>
+                <p><strong>Areas with a Strong Foundation:</strong> ${health.statusCounts.green}</p>
             </div>
         `;
         
@@ -134,7 +142,7 @@ const ResultsRenderer = {
             </div>
         `;
         
-        container.innerHTML = openingHtml + legendHtml + cardsHtml + testimonialHtml + methodHtml + summaryHtml + closingHtml + bioHtml;
+		container.innerHTML = openingHtml + legendHtml + cardsHtml + testimonialHtml + methodHtml + whyGroupHtml + summaryHtml + closingHtml + bioHtml;
     },
     
     /**
@@ -213,13 +221,17 @@ const ResultsRenderer = {
         // Method section
         markdown += `## How the X2 Method Works\n\n`;
         markdown += `${REPORT_METHOD}\n\n`;
+ 
+        // Why group section
+        markdown += `## Why a Group Format\n\n`;
+        markdown += `${REPORT_WHY_GROUP}\n\n`;
         
         // Statistics summary
         const health = results.overallHealth;
         markdown += `## Your Results at a Glance\n\n`;
-        markdown += `**Areas needing urgent attention (Red):** ${health.statusCounts.red}\n\n`;
-        markdown += `**Areas with room for improvement (Amber):** ${health.statusCounts.amber}\n\n`;
-        markdown += `**Areas functioning well (Green):** ${health.statusCounts.green}\n\n`;
+        markdown += `**Areas with High Growth Potential:** ${health.statusCounts.red}\n\n`;
+        markdown += `**Areas with Moderate Growth Potential:** ${health.statusCounts.amber}\n\n`;
+        markdown += `**Areas with a Strong Foundation:** ${health.statusCounts.green}\n\n`;
         
         // Closing paragraph
         markdown += `## What Happens Next\n\n`;
