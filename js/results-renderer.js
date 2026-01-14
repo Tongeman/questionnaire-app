@@ -166,15 +166,15 @@ const ResultsRenderer = {
                 <div class="result-card-score">${area.score}/25</div>
             </div>
             <div class="result-card-body">
-                <p><strong>Potential Chaos - ${area.chaosName}:</strong> ${area.description}</p>
-                ${area.videoUrl ? `
-                <div class="video-link-container">
-                    <a href="${area.videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link">
-                        Learn more about ${area.chaosName} →
-                    </a>
-                </div>
-                ` : ''}
-            </div>
+    <p><strong>Potential Chaos - ${area.chaosName}:</strong> ${area.description}</p>
+    ${area.videoUrl ? `
+    <div class="video-link-container">
+        <a href="${area.videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link">
+            Learn more about ${area.chaosName} →
+        </a>
+    </div>
+    ` : ''}
+</div>
         </div>
     `;
     },
