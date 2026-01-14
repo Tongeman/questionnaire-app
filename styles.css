@@ -953,6 +953,51 @@ textarea.text-input {
     }
 }
 
+/* Video link styling */
+.video-link-container {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.video-link {
+    display: inline-block;
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.video-link:hover {
+    color: #0052a3;
+    text-decoration: underline;
+}
+
+/* Status-specific video link colors (optional enhancement) */
+.result-card.status-red .video-link {
+    color: #c53030;
+}
+
+.result-card.status-red .video-link:hover {
+    color: #9b2c2c;
+}
+
+.result-card.status-amber .video-link {
+    color: #d69e2e;
+}
+
+.result-card.status-amber .video-link:hover {
+    color: #b7791f;
+}
+
+.result-card.status-green .video-link {
+    color: #38a169;
+}
+
+.result-card.status-green .video-link:hover {
+    color: #2f855a;
+}
+
 /* =====================================================
    UTILITY CLASSES
    ===================================================== */
@@ -971,3 +1016,4 @@ textarea.text-input {
 .mb-lg {
     margin-bottom: var(--space-lg);
 }
+
