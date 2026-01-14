@@ -27,7 +27,8 @@ const ScoringEngine = {
                 percentage: Math.round((totalScore / 15) * 100),
                 status: this.getStatus(totalScore),
                 statusLabel: this.getStatusLabel(totalScore),
-                description: this.getDescription(area, totalScore)
+                description: this.getDescription(area, totalScore),
+                videoUrl: area.videoUrl
             };
         }
         
