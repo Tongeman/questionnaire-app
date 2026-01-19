@@ -98,7 +98,7 @@ function generateDiagramHtmlTable(scores) {
     
     let html = `
         <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0;">
-            <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px; text-align: center;">Your Business Diagnostic Overview</h2>
+            <h2 style="color: #1e3a5f; margin-top: 0; margin-bottom: 20px; font-size: 22px; text-align: center;">Your Business Scorecard Overview</h2>
             
             <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
     `;
@@ -272,7 +272,7 @@ exports.handler = async (event, context) => {
             </head>
             <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 style="color: #1e3a5f; margin-bottom: 10px; font-size: 28px;">Your X2 Business Growth Diagnostic</h1>
+                    <h1 style="color: #1e3a5f; margin-bottom: 10px; font-size: 28px;">Your X2 Business Growth Scorecard</h1>
                     <p style="color: #666; font-size: 16px; margin: 0;">Personalised Results for ${userName}</p>
                 </div>
 
@@ -299,7 +299,7 @@ exports.handler = async (event, context) => {
                 <!-- Footer -->
                 <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #999; font-size: 12px;">
                     <p style="margin: 5px 0;">X2 Method - Business Growth Strategies</p>
-                    <p style="margin: 5px 0;">This analysis was generated specifically for you based on your diagnostic responses.</p>
+                    <p style="margin: 5px 0;">This analysis was generated specifically for you based on your scorecard responses.</p>
                 </div>
             </body>
             </html>
@@ -314,7 +314,7 @@ exports.handler = async (event, context) => {
         const emailConfig = {
             from: 'David Tongeman <david@reports.x2method.com>',
             to: userEmail,
-            subject: 'Your X2 Business Growth Diagnostic Results',
+            subject: 'Your X2 Business Growth Scorecard Results',
             html: emailHtml,
             reply_to: 'david@x2method.com'
         };
