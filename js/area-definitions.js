@@ -143,8 +143,8 @@ const REPORT_BIO = "**About Lee Duncan**\n\nLee Duncan has spent 20+ years coach
 
 // Scoring thresholds
 const SCORE_THRESHOLDS = {
-    red: { min: 0, max: 5 },
-    amber: { min: 6, max: 11 },
+    red: { min: 0, max: 8 },
+    amber: { min: 9, max: 11 },
     green: { min: 12, max: 15 }
 };
 
