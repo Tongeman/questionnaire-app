@@ -236,6 +236,11 @@ strong {
     color: var(--color-gray-700);
 }
 
+.intro-content .btn {
+    width: 100%;
+    margin-top: 2rem;
+}
+
 .intro-features {
     background: var(--color-gray-100);
     padding: var(--space-lg);
