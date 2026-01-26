@@ -24,12 +24,15 @@ exports.handler = async (event) => {
                 }),
             };
         }
+        
+........const { email, firstName, tagName, customFields } = JSON.parse(event.body || '{}');
 
         console.log('Adding person to Encharge:', email);
         console.log('Tag:', tagName);
+        console.log('Custom Fields:', customFields);
 
         // Add person and tag them
-        const result = await addPersonWithTag(email, firstName, tagName);
+        const result = await addPersonWithTag(email, firstName, tagName, customFields || {});
 
         console.log('Successfully added to Encharge:', email, 'with tag:', tagName);
 

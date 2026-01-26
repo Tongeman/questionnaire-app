@@ -246,7 +246,9 @@ async function addToEncharge(data) {
         const enchargeData = {
             email: data.email,
             firstName: data.name.split(' ')[0],
-            tagName: `X2-Constraint: ${data.primaryConstraint}`
+            tagName: `X2-Constraint: ${data.primaryConstraint}`,
+            customFields: {
+               PrimaryConstraint: data.primaryConstraint
         };
         
         const response = await fetch('/.netlify/functions/add-to-encharge', {
