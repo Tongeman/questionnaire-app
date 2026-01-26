@@ -13,7 +13,7 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { email, firstName, tagName } = JSON.parse(event.body || '{}');
+        const { email, firstName, tagName, customFields } = JSON.parse(event.body || '{}');
 
         if (!email || !firstName || !tagName) {
             return {
@@ -25,8 +25,6 @@ exports.handler = async (event) => {
             };
         }
         
-........const { email, firstName, tagName, customFields } = JSON.parse(event.body || '{}');
-
         console.log('Adding person to Encharge:', email);
         console.log('Tag:', tagName);
         console.log('Custom Fields:', customFields);
