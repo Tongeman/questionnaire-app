@@ -249,6 +249,7 @@ async function addToEncharge(data) {
             tagName: `X2-Constraint: ${data.primaryConstraint}`,
             customFields: {
                PrimaryConstraint: data.primaryConstraint
+			}
         };
         
         const response = await fetch('/.netlify/functions/add-to-encharge', {
