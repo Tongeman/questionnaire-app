@@ -23,8 +23,8 @@ const ScoringEngine = {
                 name: area.name,
                 chaosName: area.chaosName,
                 score: totalScore,
-                maxScore: 15,
-                percentage: Math.round((totalScore / 15) * 100),
+                maxScore: 5,
+                percentage: Math.round((totalScore / 5) * 100),
                 status: this.getStatus(totalScore),
                 statusLabel: this.getStatusLabel(totalScore),
                 description: this.getDescription(area, totalScore),
@@ -44,7 +44,7 @@ const ScoringEngine = {
     
     /**
      * Determine RAG status based on score
-     * @param {number} score - Score out of 15
+     * @param {number} score - Score out of 5
      * @returns {string} 'red', 'amber', or 'green'
      */
     getStatus(score) {
@@ -55,7 +55,7 @@ const ScoringEngine = {
     
     /**
      * Get human-readable status label
-     * @param {number} score - Score out of 15
+     * @param {number} score - Score out of 5
      * @returns {string} Status label
      */
     getStatusLabel(score) {
@@ -66,7 +66,7 @@ const ScoringEngine = {
     /**
      * Get appropriate description based on status
      * @param {Object} area - Area definition
-     * @param {number} score - Score out of 15
+     * @param {number} score - Score out of 5
      * @returns {string} Description
      */
     getDescription(area, score) {
@@ -119,7 +119,7 @@ const ScoringEngine = {
     calculateOverallHealth(areaScores) {
         const scores = Object.values(areaScores);
         const totalScore = scores.reduce((sum, area) => sum + area.score, 0);
-        const maxPossible = scores.length * 15;
+        const maxPossible = scores.length * 5;
         const percentage = Math.round((totalScore / maxPossible) * 100);
         
         // Count areas by status

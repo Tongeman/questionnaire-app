@@ -46,10 +46,8 @@ const ResultsRenderer = {
         container.innerHTML = `
             <h3>Your Business Profile</h3>
             <p><strong>Name:</strong> ${this.escapeHtml(contextAnswers.name)}</p>
-            <p><strong>Business:</strong> ${this.escapeHtml(contextAnswers.business_name)}</p>
             <p><strong>What you do:</strong> ${this.escapeHtml(contextAnswers.business_description)}</p>
             <p><strong>Annual Revenue:</strong> ${revenueLabel}</p>
-            <p><strong>Hours per Week:</strong> ${hoursLabel}</p>
         `;
     },
 
@@ -163,7 +161,7 @@ const ResultsRenderer = {
                     <span class="status-badge ${area.status}">${area.status.toUpperCase()}</span>
                     <h4>${area.name}</h4>
                 </div>
-                <div class="result-card-score">${area.score}/25</div>
+                <div class="result-card-score">${area.score}/5</div>
             </div>
             <div class="result-card-body">
     <p><strong>Potential Chaos - ${area.chaosName}:</strong> ${area.description}</p>
@@ -205,10 +203,8 @@ const ResultsRenderer = {
         // Business Profile
         markdown += `## Your Business Profile\n\n`;
         markdown += `**Name:** ${contextAnswers.name}\n\n`;
-        markdown += `**Business:** ${contextAnswers.business_name}\n\n`;
         markdown += `**What you do:** ${contextAnswers.business_description}\n\n`;
         markdown += `**Revenue:** ${revenueLabel}\n\n`;
-        markdown += `**Hours per week:** ${hoursLabel}\n\n`;
 
         // Opening paragraph
         markdown += `## Introduction\n\n`;
@@ -221,7 +217,7 @@ const ResultsRenderer = {
 
         for (const area of orderedAreas) {
             const statusEmoji = area.status === 'red' ? '🔴' : area.status === 'amber' ? '🟡' : '🟢';
-            markdown += `### ${statusEmoji} ${area.name} (${area.score}/15)\n`;
+            markdown += `### ${statusEmoji} ${area.name} (${area.score}/5)\n`;
             markdown += `**Status:** ${area.statusLabel}\n\n`;
             markdown += `**Potential Chaos - ${area.chaosName}:** ${area.description}\n\n`;
             if (area.videoUrl) {
