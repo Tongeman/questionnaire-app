@@ -128,7 +128,7 @@ const ResultsRenderer = {
             </div>
         `;
 
-        container.innerHTML = openingHtml + legendHtml + primaryConstraintHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
+        container.innerHTML = openingHtml + legendHtml + primaryConstraintHtml + CardsTitleHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
     },
 
     /**
