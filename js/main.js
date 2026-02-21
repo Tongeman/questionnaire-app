@@ -249,27 +249,48 @@ async function submitToBackend() {
 async function addToEncharge(data) {
     try {
         const enchargeData = {
-            email: data.email,
-            firstName: data.name.split(' ')[0],
-            tagName: `X2-Constraint: ${data.primaryConstraint}`,
-            customFields: {
-               PrimaryConstraint: data.primaryConstraint
-			}
-        };
-        
-        const response = await fetch('/.netlify/functions/add-to-encharge', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(enchargeData)
-        });
-        
-        if (!response.ok) {
-            console.warn('Encharge request failed, but continuing...');
-        } else {
-            console.log('Added to Encharge successfully');
-        }
+    email: data.email,
+    firstName: data.name.split(' ')[0],
+    tagName: `X2-Constraint: ${data.primaryConstraint}`,
+    customFields: {
+       PrimaryConstraint: data.primaryConstraint
+    }
+};
+
+const response = await fetch('/.netlify/functions/add-to-encharge', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(enchargeData)
+});
+
+if (!response.ok) {
+    console.warn('Encharge constraint tag failed, but continuing...');
+} else {
+    console.log('Added to Encharge successfully');
+}
+
+// Add Diagnostic tag
+const diagnosticTagData = {
+    email: data.email,
+    firstName: data.name.split(' ')[0],
+    tagName: 'Diagnostic'
+};
+
+const diagnosticResponse = await fetch('/.netlify/functions/add-to-encharge', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(diagnosticTagData)
+});
+
+if (!diagnosticResponse.ok) {
+    console.warn('Encharge diagnostic tag failed, but continuing...');
+} else {
+    console.log('Diagnostic tag added successfully');
+}
     } catch (error) {
         console.error('Error adding to Encharge:', error);
         // Don't throw - Encharge failure shouldn't block the user
