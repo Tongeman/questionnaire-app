@@ -85,6 +85,12 @@ const ResultsRenderer = {
             </div>
         `;
 
+        const primaryConstraintHtml = `
+            <div class="report-section report-primary-constraint">
+                <p>Your results reveal a clear priority. The area holding back your growth most right now is: <strong>${areaScores[Object.keys(areaScores).reduce((a, b) => areaScores[a].score < areaScores[b].score ? a : b)].name}</strong></p>
+            </div>
+        `;
+
         // Render each area card
         const cardsHtml = orderedAreas.map(area => this.renderAreaCard(area)).join('');
 
@@ -114,7 +120,7 @@ const ResultsRenderer = {
             </div>
         `;
 
-        container.innerHTML = openingHtml + legendHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
+        container.innerHTML = openingHtml + legendHtml + primaryConstraintHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
     },
 
     /**
@@ -182,6 +188,10 @@ const ResultsRenderer = {
         // Opening paragraph
         markdown += `## Introduction\n\n`;
         markdown += `${REPORT_OPENING}\n\n`;
+
+        const primaryConstraintName = areaScores[Object.keys(results.areaScores).reduce((a, b) => results.areaScores[a].score < results.areaScores[b].score ? a : b)].name;
+        markdown += `## Your Priority Area\n\n`;
+        markdown += `Your results reveal a clear priority. The area holding back your growth most right now is: **${primaryConstraintName}**\n\n`;
 
         // All Areas
         markdown += `## Your Detailed Results For All Nine Business Areas\n\n`;
