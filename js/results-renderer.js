@@ -72,15 +72,15 @@ const ResultsRenderer = {
             <div class="score-legend">
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>High Growth Potential  - Quick wins available (0-5)</span>
+                    <span>High Growth Potential<br>Quick wins available<br>(0-5)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot amber"></span>
-                    <span>Moderate Growth Potential - Worth investing time (6-11)</span>
+                    <span>Moderate Growth Potential<br>Worth investing time<br>(6-11)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
-                    <span>Strong Foundation - Ready to scale (12-15)</span>
+                    <span>Strong Foundation<br>Ready to scale<br>(12-15)</span>
                 </div>
             </div>
         `;
@@ -94,8 +94,7 @@ const ResultsRenderer = {
 		
         const CardsTitleHtml = `
             <div class="report-section report-primary-constraint">
-                <h3>Your Detailed Results For All Nine Business Areas</h3>
-                <p>&nbsp;</p>
+                <h3>Your Detailed Results For All Nine Business Areas:</h3>
             </div>
         `;
 
