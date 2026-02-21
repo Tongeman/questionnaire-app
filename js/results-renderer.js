@@ -92,30 +92,6 @@ const ResultsRenderer = {
         // Render each area card
         const cardsHtml = orderedAreas.map(area => this.renderAreaCard(area)).join('');
 
-        // Render testimonial section
-        const testimonialHtml = `
-            <div class="report-section report-testimonial">
-                <h3>Does This Actually Work?</h3>
-                ${MarkdownParser.parse(REPORT_TESTIMONIAL)}
-            </div>
-        `;
-
-        // Render method section
-        const methodHtml = `
-            <div class="report-section report-method">
-                <h3>How the X2 Method Works</h3>
-                ${MarkdownParser.parse(REPORT_METHOD)}
-            </div>
-        `;
-
-        // Render why group section
-        const whyGroupHtml = `
-    <div class="report-section report-why-group">
-        <h3>Why a Group Format</h3>
-        ${MarkdownParser.parse(REPORT_WHY_GROUP)}
-    </div>
-`;
-
         // Render statistics summary
         const health = ScoringEngine.calculateOverallHealth(areaScores);
         const summaryHtml = `
@@ -142,7 +118,7 @@ const ResultsRenderer = {
             </div>
         `;
 
-        container.innerHTML = openingHtml + legendHtml + cardsHtml + testimonialHtml + methodHtml + whyGroupHtml + summaryHtml + closingHtml + bioHtml;
+        container.innerHTML = openingHtml + legendHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
     },
 
     /**
@@ -228,18 +204,6 @@ const ResultsRenderer = {
                 markdown += `**Learn more:** [Watch video about ${area.chaosName}](${area.videoUrl})\n\n`;
             }
         }
-
-        // Testimonial section
-        markdown += `## Does This Actually Work?\n\n`;
-        markdown += `${REPORT_TESTIMONIAL}\n\n`;
-
-        // Method section
-        markdown += `## How the X2 Method Works\n\n`;
-        markdown += `${REPORT_METHOD}\n\n`;
-
-        // Why group section
-        markdown += `## Why a Group Format\n\n`;
-        markdown += `${REPORT_WHY_GROUP}\n\n`;
 
         // Statistics summary
         const health = results.overallHealth;

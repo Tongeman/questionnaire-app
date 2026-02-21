@@ -870,7 +870,8 @@ textarea.text-input {
     color: var(--color-gray-700);
     font-size: 1rem;
     line-height: 1.7;
-    margin-bottom: 0;
+    margin-top: 6pt;
+    margin-bottom: 6pt;
 }
 
 .legend-item {
