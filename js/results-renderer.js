@@ -193,11 +193,14 @@ const ResultsRenderer = {
         markdown += `${REPORT_OPENING}\n\n`;
 
         const primaryConstraintName = Object.keys(results.areaScores).reduce((a, b) => results.areaScores[a].score < results.areaScores[b].score ? a : b);
-        markdown += `## Your Priority Area\n\n`;
+        markdown += `## Your Detailed Results For All Nine Business Areas\n\n`;
         markdown += `Your results reveal a clear priority. The area holding back your growth most right now is: **${results.areaScores[primaryConstraintName].name}**\n\n`;
+		markdown += `Detailed results for each area follow below: `
+		markdown += `---\n\n`;
+
+		
 		
         // All Areas
-        markdown += `## Your Detailed Results For All Nine Business Areas\n\n`;
 
         const orderedAreas = ScoringEngine.getAreasInFixedOrder(results.areaScores);
 
