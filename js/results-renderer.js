@@ -184,7 +184,7 @@ const ResultsRenderer = {
         markdown += `${REPORT_OPENING}\n\n`;
 
         // All Areas
-        markdown += `## All Nine Areas\n\n`;
+        markdown += `## Your Detailed Results For All Nine Business Areas\n\n`;
 
         const orderedAreas = ScoringEngine.getAreasInFixedOrder(results.areaScores);
 
