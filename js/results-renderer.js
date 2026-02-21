@@ -92,7 +92,7 @@ const ResultsRenderer = {
             </div>
         `;
 		
-        const Cards TitleHtml = `
+        const CardsTitleHtml = `
             <div class="report-section report-primary-constraint">
                 <h3>Your Detailed Results For All Nine Business Areas</h3>
                 <p>&nbsp;</p>
