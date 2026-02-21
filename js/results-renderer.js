@@ -72,15 +72,15 @@ const ResultsRenderer = {
             <div class="score-legend">
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>High Growth Potential<br>Quick wins available<br>(0-5)</span>
+                    <span>High Growth Potential<br>Quick wins available<br>(red 0-5)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot amber"></span>
-                    <span>Moderate Growth Potential<br>Worth investing time<br>(6-11)</span>
+                    <span>Moderate Growth Potential<br>Worth investing time<br>(amber 6-11)</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
-                    <span>Strong Foundation<br>Ready to scale<br>(12-15)</span>
+                    <span>Strong Foundation<br>Ready to scale<br>(green 12-15)</span>
                 </div>
             </div>
         `;
@@ -127,7 +127,7 @@ const ResultsRenderer = {
             </div>
         `;
 
-        container.innerHTML = openingHtml + legendHtml + primaryConstraintHtml + CardsTitleHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
+        container.innerHTML = openingHtml + primaryConstraintHtml + CardsTitleHtml + legendHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
     },
 
     /**
@@ -148,7 +148,7 @@ const ResultsRenderer = {
                     <span class="status-badge ${area.status}">${area.status.toUpperCase()}</span>
                     <h4>${area.name}</h4>
                 </div>
-                <div class="result-card-score">${area.score}/25</div>
+                <div class="result-card-score">${area.score}/15</div>
             </div>
             <div class="result-card-body">
     <p><strong>Potential Chaos - ${area.chaosName}:</strong> ${area.description}</p>
