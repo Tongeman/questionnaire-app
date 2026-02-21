@@ -140,7 +140,7 @@ const UIRenderer = {
         const progressText = document.getElementById('contextProgressText');
 
         progressBar.style.width = `${progress}%`;
-        progressText.textContent = `Question ${AppState.contextIndex + 1} of ${CONTEXT_QUESTIONS.length}`;
+        progressText.textContent = `Question ${AppState.contextIndex + 1} of 30`;
     },
 
     /**
@@ -252,7 +252,7 @@ const UIRenderer = {
         const progressText = document.getElementById('diagnosticProgressText');
 
         progressBar.style.width = `${progress}%`;
-        progressText.textContent = `Question ${AppState.diagnosticIndex + 1} of ${AppState.orderedQuestions.length}`;
+        progressText.textContent = `Question ${AppState.diagnosticIndex + 4} of 30`;
 
         // Update area name
         const area = AppState.getCurrentArea();

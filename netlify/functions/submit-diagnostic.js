@@ -75,10 +75,8 @@ exports.handler = async (event, context) => {
             .insert([{
                 user_id: userData.id,
                 questionnaire_version: questionnaireVersion,
-                business_name: contextAnswers?.business_name || null,
                 business_description: contextAnswers?.business_description || null,
                 annual_revenue: contextAnswers?.annual_revenue || null,
-                hours_per_week: contextAnswers?.hours_per_week || null,
                 area_scores: scores,
                 primary_constraint: primaryConstraint,
                 raw_answers: answers

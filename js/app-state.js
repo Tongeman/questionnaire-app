@@ -29,7 +29,7 @@ const AppState = {
     results: null,
     
     // Questionnaire version
-    questionnaireVersion: 'X2-Diagnostic-v2.0',
+    questionnaireVersion: 'X2-Diagnostic-v3.0',
     
     /**
      * Initialize or reset the state
