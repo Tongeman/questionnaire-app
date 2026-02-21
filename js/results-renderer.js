@@ -39,17 +39,13 @@ const ResultsRenderer = {
      */
     renderContextSummary(contextAnswers) {
         const container = document.getElementById('contextSummary');
-
         const revenueLabel = REVENUE_LABELS[contextAnswers.annual_revenue] || contextAnswers.annual_revenue;
-        const hoursLabel = HOURS_LABELS[contextAnswers.hours_per_week] || contextAnswers.hours_per_week;
 
         container.innerHTML = `
             <h3>Your Business Profile</h3>
             <p><strong>Name:</strong> ${this.escapeHtml(contextAnswers.name)}</p>
-            <p><strong>Business:</strong> ${this.escapeHtml(contextAnswers.business_name)}</p>
             <p><strong>What you do:</strong> ${this.escapeHtml(contextAnswers.business_description)}</p>
             <p><strong>Annual Revenue:</strong> ${revenueLabel}</p>
-            <p><strong>Hours per Week:</strong> ${hoursLabel}</p>
         `;
     },
 
@@ -174,17 +170,14 @@ const ResultsRenderer = {
      */
     generateResultsMarkdown(results, contextAnswers) {
         const revenueLabel = REVENUE_LABELS[contextAnswers.annual_revenue] || contextAnswers.annual_revenue;
-        const hoursLabel = HOURS_LABELS[contextAnswers.hours_per_week] || contextAnswers.hours_per_week;
 
         let markdown = `# Your X2 Business Growth Scorecard\nPersonalised Results for ${contextAnswers.name}\n\n`;
 
         // Business Profile
         markdown += `## Your Business Profile\n\n`;
         markdown += `**Name:** ${contextAnswers.name}\n\n`;
-        markdown += `**Business:** ${contextAnswers.business_name}\n\n`;
-        markdown += `**What you do:** ${contextAnswers.business_description}\n\n`;
+       markdown += `**What you do:** ${contextAnswers.business_description}\n\n`;
         markdown += `**Revenue:** ${revenueLabel}\n\n`;
-        markdown += `**Hours per week:** ${hoursLabel}\n\n`;
 
         // Opening paragraph
         markdown += `## Introduction\n\n`;
