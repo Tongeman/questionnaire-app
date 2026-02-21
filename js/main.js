@@ -41,7 +41,7 @@ function nextContextQuestion() {
     
     if (AppState.isLastContextQuestion()) {
         // Move to diagnostic
-        startDiagnosticQuestions();
+        showTransitionScreen();;
     } else {
         AppState.nextContext();
         showCurrentContextQuestion();
@@ -59,6 +59,11 @@ function previousContextQuestion() {
     
     AppState.prevContext();
     showCurrentContextQuestion();
+}
+
+function showTransitionScreen() {
+    AppState.currentScreen = 'transition';
+    UIRenderer.showScreen('transition');
 }
 
 /**

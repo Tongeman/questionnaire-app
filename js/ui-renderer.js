@@ -8,6 +8,7 @@ const UIRenderer = {
     screens: {
         intro: 'introScreen',
         context: 'contextScreen',
+        transition: 'transitionScreen',
         diagnostic: 'diagnosticScreen',
         email: 'emailScreen',
         results: 'resultsScreen'
