@@ -87,16 +87,12 @@ const ResultsRenderer = {
 
         const primaryConstraintHtml = `
             <div class="report-section report-primary-constraint">
-                <h3>Your Priority Area</h3>
+                <h3>Your Detailed Results For All Nine Business Areas:</h3>
                 <p>Your results reveal a clear priority. The area holding back your growth most right now is: <strong>${areaScores[Object.keys(areaScores).reduce((a, b) => areaScores[a].score < areaScores[b].score ? a : b)].name}</strong></p>
+				<p>Detailed results for each area follow below:</p>
             </div>
         `;
 		
-        const CardsTitleHtml = `
-            <div class="report-section report-primary-constraint">
-                <h3>Your Detailed Results For All Nine Business Areas:</h3>
-            </div>
-        `;
 
         // Render each area card
         const cardsHtml = orderedAreas.map(area => this.renderAreaCard(area)).join('');
@@ -127,7 +123,7 @@ const ResultsRenderer = {
             </div>
         `;
 
-        container.innerHTML = openingHtml + primaryConstraintHtml + CardsTitleHtml + legendHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
+        container.innerHTML = openingHtml + primaryConstraintHtml + legendHtml + cardsHtml + summaryHtml + closingHtml + bioHtml;
     },
 
     /**
@@ -213,6 +209,7 @@ const ResultsRenderer = {
             if (area.videoUrl) {
                 markdown += `**Learn more:** [Watch video about ${area.chaosName}](${area.videoUrl})\n\n`;
             }
+            markdown += `---\n\n`;
         }
 
         // Statistics summary
