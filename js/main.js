@@ -3,6 +3,15 @@
  * Handles flow control, navigation, and API calls
  */
 
+/**
+ * Facebook pixel custom event tracker
+ */
+function trackEvent(eventName, params = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, params);
+    }
+}
+
 // ============================================================================
 // NAVIGATION FUNCTIONS
 // ============================================================================
@@ -12,8 +21,9 @@
  */
 function startDiagnostic() {
     AppState.init(); // Reset state
+    trackEvent('diagnostic_started');
     AppState.currentScreen = 'context';
-    
+
     UIRenderer.showScreen('context');
     showCurrentContextQuestion();
 }
@@ -24,7 +34,7 @@ function startDiagnostic() {
 function showCurrentContextQuestion() {
     const question = AppState.getCurrentContextQuestion();
     const currentAnswer = AppState.contextAnswers[question.id];
-    
+
     UIRenderer.renderContextQuestion(question, currentAnswer);
     UIRenderer.updateContextProgress();
     UIRenderer.updateContextButtons();
@@ -38,10 +48,10 @@ function nextContextQuestion() {
     const question = AppState.getCurrentContextQuestion();
     const value = UIRenderer.getContextInputValue();
     AppState.saveContextAnswer(question.id, value);
-    
+
     if (AppState.isLastContextQuestion()) {
         // Move to diagnostic
-        showTransitionScreen();;
+        showTransitionScreen(); ;
     } else {
         AppState.nextContext();
         showCurrentContextQuestion();
@@ -56,7 +66,7 @@ function previousContextQuestion() {
     const question = AppState.getCurrentContextQuestion();
     const value = UIRenderer.getContextInputValue();
     AppState.saveContextAnswer(question.id, value);
-    
+
     AppState.prevContext();
     showCurrentContextQuestion();
 }
@@ -73,6 +83,9 @@ function startDiagnosticQuestions() {
     AppState.currentScreen = 'diagnostic';
     UIRenderer.showScreen('diagnostic');
     showCurrentDiagnosticQuestion();
+    if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'DiagnosticStarted');
+    }
 }
 
 /**
@@ -81,7 +94,7 @@ function startDiagnosticQuestions() {
 function showCurrentDiagnosticQuestion() {
     const question = AppState.getCurrentDiagnosticQuestion();
     const currentAnswer = AppState.diagnosticAnswers[question.id];
-    
+
     UIRenderer.renderDiagnosticQuestion(question, currentAnswer);
     UIRenderer.updateDiagnosticProgress();
     UIRenderer.updateDiagnosticButtons();
@@ -94,11 +107,11 @@ function nextDiagnosticQuestion() {
     // Save current answer
     const question = AppState.getCurrentDiagnosticQuestion();
     const value = UIRenderer.getDiagnosticSelectedValue();
-    
+
     if (value !== null) {
         AppState.saveDiagnosticAnswer(question.id, value);
     }
-    
+
     if (AppState.isLastDiagnosticQuestion()) {
         // Move to email capture
         showEmailCapture();
@@ -115,11 +128,11 @@ function previousDiagnosticQuestion() {
     // Save current answer before going back
     const question = AppState.getCurrentDiagnosticQuestion();
     const value = UIRenderer.getDiagnosticSelectedValue();
-    
+
     if (value !== null) {
         AppState.saveDiagnosticAnswer(question.id, value);
     }
-    
+
     AppState.prevDiagnostic();
     showCurrentDiagnosticQuestion();
 }
@@ -138,23 +151,33 @@ function showEmailCapture() {
  */
 async function submitEmail(event) {
     event.preventDefault();
-    
+
     const emailInput = document.getElementById('userEmail');
     const consentInput = document.getElementById('emailConsent');
-    
+
     AppState.userEmail = emailInput.value.trim();
     AppState.emailConsent = consentInput.checked;
-    
+    trackEvent('email_submitted', {
+        email_consent: AppState.emailConsent
+    });
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: 'X2 Growth Diagnostic',
+            value: 1.00,
+            currency: 'GBP'
+        });
+    }
+
     // Show loading
     UIRenderer.showLoading(true, 'Calculating your results...');
-    
+
     try {
         // Calculate results
         AppState.results = ScoringEngine.calculateResults(AppState.diagnosticAnswers);
-        
+
         // Submit to backend
         await submitToBackend();
-        
+
         // Show results
         showResults();
     } catch (error) {
@@ -172,8 +195,11 @@ async function submitEmail(event) {
 function showResults() {
     AppState.currentScreen = 'results';
     UIRenderer.showScreen('results');
-    
+
     ResultsRenderer.renderResults(AppState.results, AppState.contextAnswers);
+    trackEvent('diagnostic_completed', {
+        primary_constraint: AppState.results?.primaryConstraint?.name
+    });
 }
 
 /**
@@ -182,13 +208,13 @@ function showResults() {
 function resetDiagnostic() {
     AppState.init();
     UIRenderer.showScreen('intro');
-    
+
     // Reset email sent message
     const emailSentMsg = document.getElementById('emailSentMessage');
     if (emailSentMsg) {
         emailSentMsg.classList.add('hidden');
     }
-    
+
     // Reset send email button
     const sendEmailBtn = document.getElementById('sendEmailBtn');
     if (sendEmailBtn) {
@@ -215,7 +241,7 @@ async function submitToBackend() {
         primaryConstraint: AppState.results.primaryConstraint.name,
         questionnaireVersion: AppState.questionnaireVersion
     };
-    
+
     try {
         // Submit to Supabase
         const response = await fetch('/.netlify/functions/submit-diagnostic', {
@@ -225,17 +251,17 @@ async function submitToBackend() {
             },
             body: JSON.stringify(data)
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to submit diagnostic');
         }
-        
+
         const result = await response.json();
         console.log('Diagnostic submitted successfully:', result);
-        
+
         // Add to Encharge (separate call to not block results)
         addToEncharge(data);
-        
+
         return result;
     } catch (error) {
         console.error('Error submitting to backend:', error);
@@ -249,48 +275,48 @@ async function submitToBackend() {
 async function addToEncharge(data) {
     try {
         const enchargeData = {
-    email: data.email,
-    firstName: data.name.split(' ')[0],
-    tagName: `X2-Constraint: ${data.primaryConstraint}`,
-    customFields: {
-       PrimaryConstraint: data.primaryConstraint
-    }
-};
+            email: data.email,
+            firstName: data.name.split(' ')[0],
+            tagName: `X2-Constraint: ${data.primaryConstraint}`,
+            customFields: {
+                PrimaryConstraint: data.primaryConstraint
+            }
+        };
 
-const response = await fetch('/.netlify/functions/add-to-encharge', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(enchargeData)
-});
+        const response = await fetch('/.netlify/functions/add-to-encharge', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(enchargeData)
+        });
 
-if (!response.ok) {
-    console.warn('Encharge constraint tag failed, but continuing...');
-} else {
-    console.log('Added to Encharge successfully');
-}
+        if (!response.ok) {
+            console.warn('Encharge constraint tag failed, but continuing...');
+        } else {
+            console.log('Added to Encharge successfully');
+        }
 
-// Add Diagnostic tag
-const diagnosticTagData = {
-    email: data.email,
-    firstName: data.name.split(' ')[0],
-    tagName: 'Diagnostic'
-};
+        // Add Diagnostic tag
+        const diagnosticTagData = {
+            email: data.email,
+            firstName: data.name.split(' ')[0],
+            tagName: 'Diagnostic'
+        };
 
-const diagnosticResponse = await fetch('/.netlify/functions/add-to-encharge', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(diagnosticTagData)
-});
+        const diagnosticResponse = await fetch('/.netlify/functions/add-to-encharge', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(diagnosticTagData)
+        });
 
-if (!diagnosticResponse.ok) {
-    console.warn('Encharge diagnostic tag failed, but continuing...');
-} else {
-    console.log('Diagnostic tag added successfully');
-}
+        if (!diagnosticResponse.ok) {
+            console.warn('Encharge diagnostic tag failed, but continuing...');
+        } else {
+            console.log('Diagnostic tag added successfully');
+        }
     } catch (error) {
         console.error('Error adding to Encharge:', error);
         // Don't throw - Encharge failure shouldn't block the user
@@ -303,16 +329,15 @@ if (!diagnosticResponse.ok) {
 async function sendResultsEmail() {
     const sendBtn = document.getElementById('sendEmailBtn');
     const sentMsg = document.getElementById('emailSentMessage');
-    
+
     sendBtn.disabled = true;
     sendBtn.textContent = 'Sending...';
-    
+
     try {
         const fullReportMarkdown = ResultsRenderer.generateResultsMarkdown(
-            AppState.results,
-            AppState.contextAnswers
-        );
-        
+                AppState.results,
+                AppState.contextAnswers);
+
         const data = {
             userName: AppState.contextAnswers.name,
             userEmail: AppState.userEmail,
@@ -323,7 +348,7 @@ async function sendResultsEmail() {
             scores: AppState.results.areaScores,
             fullReportMarkdown: fullReportMarkdown
         };
-        
+
         const response = await fetch('/.netlify/functions/send-results-email', {
             method: 'POST',
             headers: {
@@ -331,14 +356,14 @@ async function sendResultsEmail() {
             },
             body: JSON.stringify(data)
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to send email');
         }
-        
+
         sendBtn.textContent = 'Email Sent!';
         sentMsg.classList.remove('hidden');
-        
+
     } catch (error) {
         console.error('Error sending results email:', error);
         sendBtn.textContent = 'Send Results to My Email';
@@ -355,7 +380,7 @@ document.addEventListener('keydown', (event) => {
     // Allow Enter to proceed on current screen
     if (event.key === 'Enter') {
         const currentScreen = AppState.currentScreen;
-        
+
         if (currentScreen === 'context') {
             const nextBtn = document.getElementById('contextNextBtn');
             if (nextBtn && !nextBtn.disabled) {
@@ -368,7 +393,7 @@ document.addEventListener('keydown', (event) => {
             }
         }
     }
-    
+
     // Allow number keys 1-5 to select options on diagnostic screen
     if (AppState.currentScreen === 'diagnostic') {
         const key = parseInt(event.key, 10);
